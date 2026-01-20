@@ -23,5 +23,31 @@ this is keyword/vector search- for retrieval there are 2 very popular keyword se
 
 semantic search- search that understands meaning not words given to it.
     example- search for furniture and it will understand what furnite(desk, chair etc) and then it will search based on that rather than search for the actual word "furniture"
-
+## see sentence_similarity.py
 Embedding models- takes text and converts it into vectors/numbers to give it meaning.
+
+Vector databases- are instant, relevant results
+                -efficient resource usage
+                -scalibility
+                -uses smart indexing algorithms
+
+Indexing in a vector database is a data structure or technique that lets the database search for vectors efficiently.
+
+Without an index:
+To find the most similar vector to a query, the DB would have to compute the distance to every vector. This is called linear search and is slow for millions of vectors.
+
+With an index:
+The database organizes vectors in a smart way so you can find nearest neighbors quickly. This is called approximate nearest neighbor (ANN) search.
+
+Some common vector indexing techniques are-
+
+Flat / brute force:Stores all vectors as-is, checks every vector	Exact results	Slow for large data
+IVF (Inverted File Index):Partitions vectors into clusters, searches clusters only	Faster than brute force	Approximate
+HNSW (Hierarchical Navigable Small World):Builds a graph of vectors, navigates neighbors efficiently	Very fast, good accuracy	More memory
+PQ (Product Quantization):Compresses vectors into smaller codes for faster distance calculation	Efficient memory usage	Approximate
+
+popular vectordbs-
+chroma is python friendly/free/opensource but not for production
+pinecone is a manage service, you send queries and they do the computations for you and bill you
+
+
