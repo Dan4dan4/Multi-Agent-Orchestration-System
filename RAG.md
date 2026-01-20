@@ -16,3 +16,12 @@ Part of an LLM- is having
                             -Fine tuning is not good for dynamic factual information since that info can be changed, and you dont want to retrain it often, no citations on latest data possible, and the larger the training data, the lower the accuracy of the bot is. Instead of finetuning we use RAG, but we dont need RAG for style/language/voice since that remains constant
 
 RAG- Retrieval Augmented Generation
+
+retrieval:
+this is keyword/vector search- for retrieval there are 2 very popular keyword search tools. the BM250 and the TFIDF
+                    - these tool searchs are given words and documents, and they give you a specific weight and score based on how much they think those words are valued based on how many times it occured and how many times it DIDNT occur
+
+semantic search- search that understands meaning not words given to it.
+    example- search for furniture and it will understand what furnite(desk, chair etc) and then it will search based on that rather than search for the actual word "furniture"
+
+Embedding models- takes text and converts it into vectors/numbers to give it meaning.
