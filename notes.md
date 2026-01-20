@@ -1,9 +1,9 @@
-#Multi-Agent-Orchestration-System
+# Multi-Agent-Orchestration-System
 
 What is RAG?
 Retrieval Augmented Generation is a pattern where you dont ask an LLM to rely on its memory. Instead, you retrieve relevant knowledge at query time and five it to the model as context.
 
-#Chunking- the process of splittiong large documents into smaller pieces so they can be 
+# Chunking- the process of splittiong large documents into smaller pieces so they can be 
     -embedded
     -retrieved
     -fed into an llm as context
@@ -38,7 +38,7 @@ Each chunk:
     -Stored with metadata
     -Retrieved independently
 
-#Hallucination- is when an LLM-
+# Hallucination- is when an LLM-
                     -produces condifent-sounding
                     -plausible
                     -but factually incorrect or made-up information
