@@ -46,6 +46,16 @@ IVF (Inverted File Index):Partitions vectors into clusters, searches clusters on
 HNSW (Hierarchical Navigable Small World):Builds a graph of vectors, navigates neighbors efficiently	Very fast, good accuracy	More memory
 PQ (Product Quantization):Compresses vectors into smaller codes for faster distance calculation	Efficient memory usage	Approximate
 
+
+Vector databases are specialized databases designed to store and search high-dimensional vectors (embeddings). Unlike traditional databases that store text, numbers, or structured data, vector databases are optimized for similarity search.
+
+An embedding is a numerical representation of something (like text, image, audio, or graph) in the form of a vector (a list of numbers). Instead of storing raw text or images, you convert it to a vector of numbers. These numbers capture the meaning or features of the data.
+
+Key benefits of vector databases-Store millions of embeddings efficiently
+                                -Fast similarity search across all vectors
+                                -Persistent storage that survives restarts
+                                -Can be shared across multiple applications
+
 popular vectordbs-
 chroma is python friendly/free/opensource but not for production
 pinecone is a manage service, you send queries and they do the computations for you and bill you
