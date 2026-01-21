@@ -38,6 +38,19 @@ Each chunk:
     -Stored with metadata
     -Retrieved independently
 
+Common chunking methods is splitting documents into 200-500words in each chunk. But if you have alot of data on 1 doc, the 500 words might become a problem because somewhere in the documentt the 500word chunk might end inbetween a sentence and leave context out. So to fix this you would put an overlap of maybe 50-100words so that every begin/end of the chunk might be able to capture the full sentence and not leave any context/logic out.
+
+# Chunking Best Practices-
+size guidelines: 200-500 characters, 50-100 character overlap
+boundary rules: split at sentences, Avoid mid-word breaks
+quality checks: test with real queries, verify context preservation, monitor search results
+
+
+
+chunking example in chunking_demo.py and agentic_chunking.py
+
+
+
 # Hallucination- is when an LLM-
                     -produces condifent-sounding
                     -plausible
