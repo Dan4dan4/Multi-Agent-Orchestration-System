@@ -63,7 +63,22 @@ chroma is python friendly/free/opensource but not for production
 pinecone is a manage service, you send queries and they do the computations for you and bill you
 
 
-RAG PIPELINE-
+# RAG PIPELINE
 
 Gets specific documents -> chunks them into small pieces(500chars,50word overlap),converts them into embeddings using open ai and embedding models -> loads them into a vector db 
+
+Caching- for FAQ we cache and store the data in a embedding cache
+
+Monitoring- response time, thoughput (queries/second), error rates
+track quality of retrieval chunks, embedding performance is how long it takes to track vectors, chunking effiency is how well we are breaking up documents
+if response time is too long, or error rate is above 5% we need to take a look at the rag. we should set up alerts
+
+Non avoidable problems faced in production are vectordbs go down, llms services are unavailable, networks have timeouts,
+
+To handle RAGs at full capacity:
+    -try RAG pipeline if it fails
+    -try keyword search, if it fails
+    -try to return full chunks directly, if it fails
+    -try simple text matching, if it fails
+    -send a helpful message such as "Service temporarily unavailable. Please try again later"
 
