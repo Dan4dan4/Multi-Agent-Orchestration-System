@@ -129,3 +129,11 @@ def search_vector(collection, query_embedding, top_k: int =3):
     )
 
     return results
+
+#  Context Augmentation
+
+def augment_context(query: str, search_results: List[Dict]) -> str:
+    """
+    build an aufmented prompt using retrieved document chunks.
+    the llm will only answer using the provided context and say idk if it doesnt know
+    """
