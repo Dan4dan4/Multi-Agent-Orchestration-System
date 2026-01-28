@@ -110,3 +110,22 @@ def process_query(query: str):
     query_embedding = model.encode([cleaned_query])
 
     return query_embedding
+
+# Vector Search
+
+# the collection is the brain of the documents provided and the query_embedding is the numerical 
+# vector of the question asked. top_k controls how many chunks we retrieve. more chunks = more noise
+def search_vector(collection, query_embedding, top_k: int =3):
+    """
+    this will search and compare query_embedding to every stored chunk embedding and rank them based on 
+    cosine since we defined that. this function returns chunk text/metadata.
+    """
+    # search rag memory
+    results= collection.query(
+        # this is the meaning of the users question
+        query_embeddings= [query_embedding],
+        # give me the top_k results
+        n_results = top_k
+    )
+
+    return results
