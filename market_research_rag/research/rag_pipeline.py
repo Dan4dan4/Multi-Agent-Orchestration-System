@@ -137,3 +137,14 @@ def augment_context(query: str, search_results: List[Dict]) -> str:
     build an aufmented prompt using retrieved document chunks.
     the llm will only answer using the provided context and say idk if it doesnt know
     """
+
+    # context = "\n\n".join(
+    #     [f"Title: {item['metadata']['title']}\nContent: {item['document']}" for item in search_results]
+    # )
+
+    # augmented_prompt = (
+    #     f"Use the following context to answer the question. If the answer is not contained within the context, "
+    #     f"respond with 'I don't know'.\n\nContext:\n{context}\n\nQuestion: {query}\nAnswer:"
+    # )
+
+    # return augmented_prompt
