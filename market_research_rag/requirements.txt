@@ -15,12 +15,14 @@ numpy
 transformers
 torch   # Required backend for Hugging Face models
 
-# Optional: PDF and Word doc parsing for uploads
+#PDF and Word doc parsing for uploads
 pdfplumber
 python-docx
 
-# Optional: for async processing or web requests if needed
+#For async processing or web requests if needed
 requests
+
+djangorestframework>=3.15
 
 
 # to run all do this  
