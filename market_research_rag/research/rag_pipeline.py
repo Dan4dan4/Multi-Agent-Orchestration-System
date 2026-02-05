@@ -119,7 +119,7 @@ def process_query(query: str):
     cleaned_query = query.lower().strip()
 
     # this is what we will pass into chromadb
-    query_embedding = model.encode([cleaned_query])
+    query_embedding = model.encode(cleaned_query)
 
     return query_embedding
 
@@ -221,10 +221,49 @@ def generate_response(augmented_prompt: str) -> str:
         )
         # this will return a list, we will extract the 1st result
         response = output[0]["generated_text"]
-        
+
     # incase model doesnt load, network issues
     except Exception as e:
         response = f"Error generating response: {e}"
 
     return response
 
+def run_rag_pipeline(query: str, top_k: int = 3):
+    """
+    Run the full RAG pipeline:
+    1. Load documents and chunk
+    2. Store chunks in ChromaDB
+    3. Convert query to embedding
+    4. Retrieve relevant chunks
+    5. Build augmented prompt
+    6. Generate response via Hugging Face
+    """
+
+    # Step 1: load and chunk docs
+    chunks = load_and_chunk_docs()
+    if not chunks:
+        print("No documents found in DB.")
+        return "No documents available."
+
+    # Step 2: store chunks in vector db
+    collection = vector_db(chunks)
+
+    # Step 3: processs user query to embeddings
+    query_embedding = process_query(query)
+
+    # Step 4: search the vector database
+    results = search_vector(collection, query_embedding, top_k=top_k)
+
+    # Step 5: build augmented context for LLM
+    docs_and_metadata = [
+    {"content": doc, "metadata": meta[0] if isinstance(meta, list) else meta}
+    for doc, meta in zip(results['documents'], results['metadatas'])
+    ]
+
+    # Step 6: build augmented prompt for LLM
+    augmented_prompt = augment_context(query, docs_and_metadata)
+
+    # Step 7: generate response using hugging face
+    response = generate_response(augmented_prompt)
+
+    return response
