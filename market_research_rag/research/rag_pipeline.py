@@ -134,20 +134,54 @@ def search_vector(collection, query_embedding, top_k: int =3):
 
 def augment_context(query: str, search_results: List[Dict]) -> str:
     """
-    build an aufmented prompt using retrieved document chunks.
-    the llm will only answer using the provided context and say idk if it doesnt know
+    Build an augmented prompt using retrieved document chunks.
+    The LLM will only answer using the provided context and say idk if it doesn't know.
     """
 
-    # context = "\n\n".join(
-    #     [f"Title: {item['metadata']['title']}\nContent: {item['document']}" for item in search_results]
-    # )
+    # fail safe incase we dont see any relevant info, we DONT generate an answer
+    # prevents hallucinations
+    if not search_results:
+        return (
+            "No relevant information found in the documents.\n\n"
+            f"Question: {query}\n\n"
+            "Answer: I don't know based on the provided documents."
+        )
+    
+    # each chunk that will be helpfull will be stored here
+    context_blocks = []
 
-    # augmented_prompt = (
-    #     f"Use the following context to answer the question. If the answer is not contained within the context, "
-    #     f"respond with 'I don't know'.\n\nContext:\n{context}\n\nQuestion: {query}\nAnswer:"
-    # )
+    # loop through chunk and source them as: 
+    for i, result in enumerate(search_results, 1):
+        context_blocks.append(
+            # Source 1, Source 2, Source 3
+            f"Source {i}:\n"
+            f"Company: {result['metadata']['company']}\n"
+            f"Document Type: {result['metadata']['doc_type']}\n"
+            f"Content:\n{result['content']}"
+        )
 
-    # return augmented_prompt
+    # Combines all chunk strings into 1 big block context section separated by blank lines
+    context = "\n\n".join(context_blocks)
 
+    # this prompt is sent to the LLM, we tell it what it is(financial research assistant)
+    # we tell it the strict rules:
+    # force a grounded answer if it doesnt know:
+    augmented_prompt = f"""
+You are a financial research assistant.
 
-    l
+RULES:
+- Use ONLY the information in the context below
+- If the answer is not present, say "I don't know based on the provided documents"
+- Do NOT use outside knowledge to answer
+- Cite which Source you used
+
+CONTEXT:
+{context}
+
+QUESTION:
+{query}
+
+ANSWER:
+"""
+
+    return augmented_prompt
