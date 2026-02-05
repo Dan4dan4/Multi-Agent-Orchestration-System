@@ -6,6 +6,15 @@ from sentence_transformers import SentenceTransformer
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import numpy as np
 from research.models import Document
+from transformers import pipeline
+
+# global hugging face pipeline(used for generate response)
+# =====================================================
+generator = pipeline(
+    task="text2text-generation",
+    model="google/flan-t5-base"
+)
+
 
 # DOC LOADING AND CHUNKING
 
@@ -185,3 +194,14 @@ ANSWER:
 """
 
     return augmented_prompt
+
+
+# Response generation 
+
+def generate_response(augmented_prompt: str) -> str:
+    """
+    generate a response using the free Hugging Face model.
+    This is the real LLM step of the RAG pipeline.
+    """
+
+    
