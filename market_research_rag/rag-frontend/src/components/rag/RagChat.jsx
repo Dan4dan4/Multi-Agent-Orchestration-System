@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { askRag } from "../../api/api";
 
 export default function RagChat() {
@@ -6,24 +6,38 @@ export default function RagChat() {
     const [response, setResponse] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async () => {
-        try {
-            setLoading(true);
-            const res = await askRag(query);
+    useEffect(() => {
+    const handleBeforeUnload = async () => {
+      try {
+        await fetch("http://127.0.0.1:8000/rag/clear_docs/", {
+          method: "POST",
+        });
+        console.log("Temporary documents cleared on server.");
+      } catch (err) {
+        console.warn("Failed to clear temporary docs:", err);
+      }
+    };
 
-            setResponse(res.data.answer);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
-        }
-        catch (err){
-            setResponse("Error connecting to RAG service");
-        }
-        finally {
-            setLoading(false)
-        }
+  const handleSubmit = async () => {
+    try {
+      setLoading(true);
+      const res = await askRag(query);
+      setResponse(res.data.answer);
+    } catch (err) {
+      setResponse("Error connecting to RAG service");
+    } finally {
+      setLoading(false);
     }
+  };
 
-
-    return (
+  return (
     <div>
       <h2>RAG Assistant</h2>
 
@@ -33,9 +47,7 @@ export default function RagChat() {
         placeholder="Ask a question..."
       />
 
-      <button onClick={handleSubmit}>
-        Ask
-      </button>
+      <button onClick={handleSubmit}>Ask</button>
 
       {loading && <p>Thinking...</p>}
 

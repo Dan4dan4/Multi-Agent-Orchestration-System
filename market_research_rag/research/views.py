@@ -14,6 +14,10 @@ import re
 
 # Create your views here.
 
+# In-memory storage for uploaded documents for session only
+TEMP_DOCS = []
+
+
 # Document CRUD using viewset
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
@@ -36,20 +40,20 @@ def query_rag(request):
 
 @api_view(['POST'])
 def ask_rag(request):
-
     query = request.data.get("query")
-
     if not query:
         return Response({"error": "Query is required"}, status=status.HTTP_400_BAD_REQUEST)
     
-    answer = run_rag_pipeline(query)
+    # Pass TEMP_DOCS as first argument
+    answer = run_rag_pipeline(TEMP_DOCS, query)
 
     return Response({"answer": answer})
 
 # allows the upload of documents via API
-
 def extract_text(file):
-    """Extract text from .txt or .pdf files"""
+    """
+    Extract text from .txt or .pdf files
+    """
     if file.name.endswith(".txt"):
         return file.read().decode("utf-8")
     elif file.name.endswith(".pdf"):
@@ -63,24 +67,17 @@ def extract_text(file):
     else:
         return ""
     
-
-TEMP_DOCS = []
-
 @api_view(["POST"])
 def upload_document(request):
+    """
+    Accepts file upload, extracts text, stores in TEMP_DOCS only
+    """
     file = request.FILES.get("file")
     if not file:
         return Response({"error": "No file uploaded"}, status=400)
 
     # extract content
-    if file.name.endswith(".pdf"):
-        reader = PyPDF2.PdfReader(file)
-        content = ""
-        for page in reader.pages:
-            text = page.extract_text() or ""
-            content += text + " "
-    else:
-        content = file.read().decode("utf-8")
+    content = extract_text(file)
 
     # clean extra whitespace
     content = re.sub(r'\s+', ' ', content).strip()
@@ -95,3 +92,12 @@ def upload_document(request):
     })
 
     return Response({"status": "success"})
+
+#clear TEMP_DOCS for a fresh session
+@api_view(["POST"])
+def clear_docs(request):
+    """
+    Clears all uploaded documents in memory
+    """
+    TEMP_DOCS.clear()
+    return Response({"status": "all documents cleared"})
