@@ -1,9 +1,12 @@
 import RagChat from "./components/rag/RagChat";
+import QueryBox from "./components/QueryBox";
 
 function App() {
   return (
     <div>
-      <RagChat />
+      <h1>RAG Research Assistant</h1>
+
+      <QueryBox />
     </div>
   );
 }
