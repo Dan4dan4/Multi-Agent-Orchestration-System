@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { askRag } from "../api/api";
+import "./QueryBox.css";
 
 export default function QueryBox() {
 

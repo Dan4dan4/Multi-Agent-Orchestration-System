@@ -1,12 +1,15 @@
 import RagChat from "./components/rag/RagChat";
 import QueryBox from "./components/QueryBox";
+import "./App.css";
 
 function App() {
   return (
-    <div>
-      <h1>RAG Research Assistant</h1>
+    <div className="app-container">
+      <h1>RAG</h1>
 
-      <QueryBox />
+      <div className="fullscreen-box">
+        <QueryBox />
+      </div>
     </div>
   );
 }
