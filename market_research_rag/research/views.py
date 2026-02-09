@@ -11,6 +11,8 @@ from datetime import date
 import PyPDF2
 from django.utils import timezone
 import re
+import chromadb
+
 
 # Create your views here.
 
@@ -105,7 +107,20 @@ def upload_document(request):
 @api_view(["POST"])
 def clear_docs(request):
     """
-    Clears all uploaded documents in memory
+    Clears all uploaded documents in memory and in chromadb
     """
-    TEMP_DOCS.clear()
-    return Response({"status": "all documents cleared"})
+    global TEMP_DOCS
+
+    # clear in-memory docs
+    TEMP_DOCS = []
+    # clear chroma collection
+    client = chromadb.Client()
+    try:
+        client.delete_collection("financial_documents")
+    except:
+        pass
+
+    return Response({
+        "status": "cleared",
+        "docs_remaining": len(TEMP_DOCS)
+    })

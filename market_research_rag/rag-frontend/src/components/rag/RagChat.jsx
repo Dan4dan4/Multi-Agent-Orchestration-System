@@ -7,23 +7,20 @@ export default function RagChat() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-    const handleBeforeUnload = async () => {
-      try {
-        await fetch("http://127.0.0.1:8000/rag/clear_docs/", {
-          method: "POST",
-        });
-        console.log("Temporary documents cleared on server.");
-      } catch (err) {
-        console.warn("Failed to clear temporary docs:", err);
-      }
-    };
+  const clearOnOpen = async () => {
+    try {
+      await fetch("http://127.0.0.1:8000/rag/clear_docs/", {
+        method: "POST",
+      });
+      console.log("Session reset");
+    } catch (err) {
+      console.warn(err);
+    }
+  };
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+  clearOnOpen();
+}, []);
+
 
   const handleSubmit = async () => {
     try {
