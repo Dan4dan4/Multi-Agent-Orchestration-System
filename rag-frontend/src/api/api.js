@@ -23,4 +23,6 @@ export const uploadDocument = (formData) => {
   });
 };
 
+export const clearDocs = () => api.post("/rag/clear_docs/");
+
 export default api;
